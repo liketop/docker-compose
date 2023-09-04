@@ -14,7 +14,8 @@ services:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=wireguard # or wireguard
       - SERVER_COUNTRIES=Germany
-      - stack.env
+    env_file:
+      - stack.env # wireguard private key is configured in portainer
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
