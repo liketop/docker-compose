@@ -50,7 +50,5 @@ services:
       - ./sabnzbd:/config
       - /media/sabnzbd/downloads:/downloads #optional
       - /media/sabnzbd/incomplete/downloads:/incomplete-downloads #optional
-    ports:
-
     network_mode: "service:gluetun"
     restart: unless-stopped
