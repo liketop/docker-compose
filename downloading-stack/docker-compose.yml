@@ -1,5 +1,19 @@
 version: "2.1"
 services:
+  gluetun:
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 9696:9696
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+      - 8080:8080
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=wireguard # or wireguard
+      - SERVER_COUNTRIES=Germany
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -9,8 +23,7 @@ services:
       - TZ=Europe/Rome
     volumes:
       - ./prowlarr:/config
-    ports:
-      - 9696:9696
+    network_mode: "service:gluetun"
     restart: unless-stopped
 
   transmission:
@@ -23,10 +36,7 @@ services:
     volumes:
       - ./transmission:/config
       - /media/transmission/downloads:/downloads
-    ports:
-      - 9091:9091
-      - 51413:51413
-      - 51413:51413/udp
+    network_mode: "service:gluetun"
     restart: unless-stopped
 
   sabnzbd:
@@ -41,5 +51,6 @@ services:
       - /media/sabnzbd/downloads:/downloads #optional
       - /media/sabnzbd/incomplete/downloads:/incomplete-downloads #optional
     ports:
-      - 8080:8080
+
+    network_mode: "service:gluetun"
     restart: unless-stopped
